@@ -9,7 +9,7 @@
 
 
 
-# ft.app(target=main, view=ft.WEB_BROWSER) - para abri como um site
+# ft.app(target=main) - para abri como um app
 # target apontando qual é o main
 # control + C para pausar terminal
 # pubsub - um tunel de inf
@@ -25,14 +25,16 @@ def main(pagina):
     nome_user = ft.TextField(label="Escreva seu nome")
 
     def enviar_mens_global(mensagem):
+        texto_mens = mensagem["texto"]
+        user_mens = mensagem["user"]
         #add mens no chat
-        chat.controls.append(ft.Text(mensagem))
+        chat.controls.append(ft.Text(f"{user_mens}: {texto_mens}"))
         pagina.update()
 
     pagina.pubsub.subscribe(enviar_mens_global)
 
     def enviar_mens(event):
-        pagina.pubsub.send_all(campo_mens.value)
+        pagina.pubsub.send_all({"texto":campo_mens.value, "user": nome_user.value})
 
         #limpar chat
         campo_mens.value = ""
