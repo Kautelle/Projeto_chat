@@ -25,16 +25,21 @@ def main(pagina):
     nome_user = ft.TextField(label="Escreva seu nome")
 
     def enviar_mens_global(mensagem):
-        texto_mens = mensagem["texto"]
-        user_mens = mensagem["user"]
-        #add mens no chat
-        chat.controls.append(ft.Text(f"{user_mens}: {texto_mens}"))
+        tipo = mensagem["tipo"]
+        if tipo == "mensagem":
+            texto_mens = mensagem["texto"]
+            user_mens = mensagem["user"]
+            #add mens no chat
+            chat.controls.append(ft.Text(f"{user_mens}: {texto_mens}"))
+        else:
+            user_mens = mensagem["user"]
+            chat.controls.append(ft.Text(f"{user_mens} entrou no chat", size=10, italic=True, color=ft.colors.GREEN))
         pagina.update()
 
     pagina.pubsub.subscribe(enviar_mens_global)
 
     def enviar_mens(event):
-        pagina.pubsub.send_all({"texto":campo_mens.value, "user": nome_user.value})
+        pagina.pubsub.send_all({"texto":campo_mens.value, "user": nome_user.value, "tipo": "mensagem"})
 
         #limpar chat
         campo_mens.value = ""
@@ -44,6 +49,7 @@ def main(pagina):
     botão_enviar_mens = ft.TextButton("Enviar", on_click=enviar_mens)
 
     def entrar_modal(event):
+        pagina.pubsub.send_all({"user": nome_user.value, "tipo": "entrada"})
         #abrir chat
         pagina.add(chat)
         #fechar modal
