@@ -30,7 +30,7 @@ def main(pagina):
             texto_mens = mensagem["texto"]
             user_mens = mensagem["user"]
             #add mens no chat
-            chat.controls.append(ft.Text(f"{user_mens}: {texto_mens}"))
+            chat.controls.append(ft.Text(f"{user_mens}: {texto_mens}", size=9, color=ft.colors.RED_400))
         else:
             user_mens = mensagem["user"]
             chat.controls.append(ft.Text(f"{user_mens} entrou no chat", size=10, italic=True, color=ft.colors.GREEN))
@@ -45,7 +45,7 @@ def main(pagina):
         campo_mens.value = ""
         pagina.update()
 
-    campo_mens = ft.TextField(label="Digite sua mensagem")
+    campo_mens = ft.TextField(label="Digite sua mensagem", on_submit=enviar_mens)
     botão_enviar_mens = ft.TextButton("Enviar", on_click=enviar_mens)
 
     def entrar_modal(event):
